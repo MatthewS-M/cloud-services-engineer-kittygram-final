@@ -119,11 +119,13 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          command_timeout: 10m
           script: |
             cd ~/kittygram
-            sudo docker-compose -f docker-compose.production.yml down
-            sudo docker-compose -f docker-compose.production.yml pull
+            sudo docker-compose -f docker-compose.production.yml down || true
+            sudo docker-compose -f docker-compose.production.yml pull --quiet
             sudo docker-compose -f docker-compose.production.yml up -d
+            sleep 10
             sudo docker-compose -f docker-compose.production.yml exec -T backend python manage.py collectstatic --no-input
             sudo docker-compose -f docker-compose.production.yml exec -T backend python manage.py migrate --no-input
 
@@ -160,7 +162,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ Деплой Kittygram успешно завершен!
+            /// Kittygram DEPLOYED SUCCESSFULLY
             
             Проект доступен по адресу: ${{ secrets.KITTYGRAM_DOMAIN }}
 
