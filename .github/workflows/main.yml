@@ -162,7 +162,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ Деплой Kittygram успешно завершен!
+            /// Kittygram DEPLOYED SUCCESSFULLY
             
             Проект доступен по адресу: ${{ secrets.KITTYGRAM_DOMAIN }}
 
