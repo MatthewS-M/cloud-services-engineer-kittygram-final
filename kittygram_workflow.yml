@@ -103,6 +103,8 @@ jobs:
           echo "DB_HOST=db" >> .env
           echo "DB_PORT=5432" >> .env
           echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DEBUG=False" >> .env
 
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.4
@@ -162,7 +164,10 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            /// Kittygram DEPLOYED SUCCESSFULLY!
+            ✅ Kittygram DEPLOYED SUCCESSFULLY!
             
-            Проект доступен по адресу: ${{ secrets.KITTYGRAM_DOMAIN }}
+            👤 Автор: ${{ github.actor }}
+            📝 Коммит: ${{ github.event.head_commit.message }}
+            🔗 Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            🌐 Проект: ${{ secrets.KITTYGRAM_DOMAIN }}
 
