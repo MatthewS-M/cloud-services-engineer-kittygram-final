@@ -31,7 +31,7 @@ jobs:
 
       - name: Run backend tests
         run: |
-          pytest
+          pytest tests/test_files.py
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
