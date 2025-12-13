@@ -31,7 +31,6 @@ jobs:
 
       - name: Run backend tests
         run: |
-          cd backend
           pytest
 
       - name: Set up Node.js
