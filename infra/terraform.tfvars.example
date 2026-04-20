@@ -1,0 +1,10 @@
+cloud_id              = "your-cloud-id"
+folder_id             = "your-folder-id"
+zone                  = "ru-central1-a"
+vm_name               = "kittygram-vm"
+vm_user               = "deployer"
+ssh_public_key        = "ssh-ed25519 AAAA..."
+gateway_port          = 80
+storage_access_key    = "your-object-storage-access-key"
+storage_secret_key    = "your-object-storage-secret-key"
+service_account_key_file = "sa-key.json"

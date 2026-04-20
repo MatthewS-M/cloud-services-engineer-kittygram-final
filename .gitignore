@@ -1,2 +1,14 @@
 
 .DS_Store
+.env
+*.env
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+infra/terraform.rc
+infra/sa-key.json
+backend/__pycache__/
+backend/kittygram_backend/__pycache__/
+backend/cats/__pycache__/
+tests/__pycache__/
