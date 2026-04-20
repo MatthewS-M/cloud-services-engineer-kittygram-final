@@ -36,7 +36,6 @@ Terraform state хранится в S3-совместимом backend Yandex Obj
 - `HOST`
 - `USER`
 - `SSH_KEY`
-- `SSH_PASSPHRASE`
 - `DOCKERHUB_USERNAME`
 - `DOCKERHUB_TOKEN`
 - `POSTGRES_DB`
