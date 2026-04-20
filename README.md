@@ -1,24 +1,65 @@
-#  Как работать с репозиторием финального задания
+# Kittygram Final
 
-## Что нужно сделать
+Репозиторий подготовлен под проектную работу с двумя независимыми pipeline:
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+- `.github/workflows/terraform.yml` для ручного управления инфраструктурой в Yandex Cloud через `plan`, `apply`, `destroy`.
+- `.github/workflows/deploy.yml` для CI/CD приложения Kittygram после пуша в `main`.
 
-## Как проверить работу с помощью автотестов
+## Что разворачивает Terraform
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (http://<ip-адрес вашей ВМ>:<порт gateway>) на ваш проект Kittygram
-dockerhub_username: ваш_логин_на_докерхабе
+Конфигурация в директории `infra/` создаёт:
+
+- VPC-сеть и подсеть.
+- Security Group с входом только на `22` и `80`, а также полным исходящим трафиком.
+- Виртуальную машину на Ubuntu 24.04 LTS.
+- Object Storage bucket для проекта.
+- Инициализацию VM через `cloud-init`, включая установку Docker Engine и Docker Compose plugin.
+
+Terraform state хранится в S3-совместимом backend Yandex Object Storage. Имя backend bucket передаётся в workflow через секрет `TF_STATE_BUCKET`.
+
+## Необходимые GitHub Secrets
+
+### Для Terraform
+
+- `YC_CLOUD_ID`
+- `YC_FOLDER_ID`
+- `YC_ZONE`
+- `YC_SERVICE_ACCOUNT_KEY_JSON`
+- `STORAGE_ACCESS_KEY`
+- `STORAGE_SECRET_KEY`
+- `TF_STATE_BUCKET`
+- `SSH_PUBLIC_KEY`
+- `USER`
+
+### Для деплоя
+
+- `HOST`
+- `USER`
+- `SSH_KEY`
+- `SSH_PASSPHRASE`
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+- `POSTGRES_DB`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `DJANGO_SECRET_KEY`
+- `TELEGRAM_TO`
+- `TELEGRAM_TOKEN`
+
+## Полезные файлы
+
+- `.env.example` — пример production-переменных.
+- `tests.yml` — данные для ревьюерских автотестов.
+- `kittygram_workflow.yml` — копия основного workflow деплоя для проверки структуры проекта.
+
+## Локальная проверка
+
+Для локального запуска тестов:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r backend/requirements.txt
+pip install pytest requests pyyaml
+pytest tests/test_files.py
 ```
-
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
-
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
-
-## Чек-лист для проверки перед отправкой задания
-
-- Проект Kittygram доступен по ссылке, указанной в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.

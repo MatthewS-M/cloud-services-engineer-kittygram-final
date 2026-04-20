@@ -4,6 +4,21 @@ from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+def load_env_file(env_path):
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        os.environ.setdefault(key.strip(), value.strip())
+
+
+load_env_file(BASE_DIR / '.env')
+
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
@@ -62,7 +77,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'kittygram'),
         'USER': os.getenv('POSTGRES_USER', 'kittygram_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'kittygram_password'),
-        'HOST': os.getenv('DB_HOST', 'db'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', 5432)
     }
 }
